@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STOC Opportunity Intelligence — Physical Therapy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1F3A;
+    --navy-mid: #122848;
+    --blue: #1A5F9E;
+    --blue-light: #2B7FC4;
+    --accent: #4FA8E0;
+    --muted: #6B8CAE;
+    --gray-light: #E8EFF6;
+    --gray-line: #D0DCE8;
+    --white: #FFFFFF;
+    --text: #0B1F3A;
+    --text-soft: #4A6480;
+    --green: #2ECC8F;
+    --orange: #F0A04B;
+    --red: #E05C5C;
+    --score-high: #1A5F9E;
+    --score-mid: #4FA8E0;
+    --score-low: #D0DCE8;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F2F6FA;
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 13px;
+  }
+
+  /* SIDEBAR NAV */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 220px;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    padding: 28px 0 20px;
+  }
+
+  .sidebar-logo {
+    padding: 0 22px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .logo-mark {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav-section {
+    padding: 20px 0 8px;
+  }
+
+  .nav-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 22px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 22px;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+  .nav-item.active { color: var(--white); background: rgba(79,168,224,0.12); border-left-color: var(--accent); font-weight: 500; }
+
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+  .nav-item.active .nav-dot { background: var(--accent); opacity: 1; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 22px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sector-pill {
+    background: rgba(79,168,224,0.15);
+    border: 1px solid rgba(79,168,224,0.3);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
+  .sector-label { color: var(--muted); font-size: 9px; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 220px;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-line);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+
+  .page-subtitle {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 1px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.3px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gray-light);
+    border: 1px solid var(--gray-line);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: var(--text-soft);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .filter-chip span { color: var(--navy); font-weight: 500; }
+
+  .export-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 24px 32px 40px;
+  }
+
+  /* SCORE STRIP */
+  .score-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .score-card {
+    background: var(--white);
+    border: 1px solid var(--gray-line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--blue);
+  }
+
+  .score-card.high::before { background: var(--green); }
+  .score-card.mid::before { background: var(--accent); }
+  .score-card.low::before { background: var(--orange); }
+
+  .score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+  }
+
+  .score-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--navy);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .score-pct { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+  .score-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .percentile {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-soft);
+  }
+
+  .sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 18px;
+  }
+
+  .spark-bar {
+    width: 3px;
+    background: var(--gray-line);
+    border-radius: 1px;
+    transition: height 0.3s;
+  }
+
+  .spark-bar.filled { background: var(--accent); }
+
+  /* GRID LAYOUT */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-32 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  /* PANELS */
+  .panel {
+    background: var(--white);
+    border: 1px solid var(--gray-line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--gray-line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--navy);
+    letter-spacing: -0.2px;
+  }
+
+  .panel-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .panel-body { padding: 16px 18px; }
+
+  /* HEATMAP */
+  .heatmap-table { width: 100%; border-collapse: collapse; }
+  .heatmap-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px 10px;
+    text-align: center;
+    font-weight: 400;
+  }
+  .heatmap-table th:first-child { text-align: left; }
+
+  .heatmap-table td {
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 11px;
+    border-top: 1px solid var(--gray-line);
+  }
+
+  .heatmap-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: var(--navy);
+    font-size: 12px;
+  }
+
+  .heat-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 24px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .h5 { background: #0B3D6B; color: #fff; }
+  .h4 { background: #1A5F9E; color: #fff; }
+  .h3 { background: #4FA8E0; color: #fff; }
+  .h2 { background: #A8D4F0; color: var(--navy); }
+  .h1 { background: var(--gray-light); color: var(--text-soft); }
+
+  .row-score {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
+  }
+
+  /* VELOCITY CHART */
+  .velocity-chart {
+    position: relative;
+    height: 160px;
+    margin: 8px 0;
+  }
+
+  .chart-area {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .chart-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .chart-bar {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    min-height: 4px;
+  }
+
+  .chart-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .chart-grid-line {
+    position: absolute;
+    left: 0; right: 0;
+    border-top: 1px dashed var(--gray-line);
+  }
+
+  /* METRIC CARDS ROW */
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 14px 18px;
+    border-top: 1px solid var(--gray-line);
+  }
+
+  .metric-item { }
+  .metric-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+  }
+  .metric-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-soft);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .metric-delta {
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 3px;
+  }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+
+  /* GEO MAP PLACEHOLDER */
+  .map-placeholder {
+    background: var(--gray-light);
+    border-radius: 4px;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-svg { width: 100%; height: 100%; opacity: 0.5; }
+
+  .map-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.7;
+  }
+
+  /* SPONSOR TABLE */
+  .sponsor-table { width: 100%; border-collapse: collapse; }
+  .sponsor-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 10px 10px;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 1px solid var(--gray-line);
+  }
+  .sponsor-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--gray-line);
+    font-size: 11.5px;
+  }
+  .sponsor-name { font-weight: 500; color: var(--navy); }
+  .sponsor-tag {
+    display: inline-block;
+    background: rgba(79,168,224,0.12);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--blue);
+  }
+
+  .velocity-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .velocity-track { flex: 1; height: 4px; background: var(--gray-line); border-radius: 2px; }
+  .velocity-fill { height: 100%; border-radius: 2px; background: var(--blue-light); }
+  .velocity-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-soft); width: 24px; text-align: right; }
+
+  /* MATURITY RADAR PLACEHOLDER */
+  .radar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    position: relative;
+  }
+
+  /* FRICTION BAR */
+  .friction-list { display: flex; flex-direction: column; gap: 10px; }
+  .friction-item { }
+  .friction-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .friction-name { font-size: 11px; color: var(--text); font-weight: 400; }
+  .friction-pct { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-soft); }
+  .friction-track { height: 5px; background: var(--gray-light); border-radius: 3px; }
+  .friction-fill { height: 100%; border-radius: 3px; }
+
+  /* TECH BARS */
+  .tech-list { display: flex; flex-direction: column; gap: 8px; }
+  .tech-item { display: flex; align-items: center; gap: 10px; }
+  .tech-name { font-size: 11px; color: var(--text); width: 130px; flex-shrink: 0; }
+  .tech-track { flex: 1; height: 14px; background: var(--gray-light); border-radius: 3px; overflow: hidden; }
+  .tech-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 6px; }
+  .tech-pct { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--white); font-weight: 500; }
+
+  /* SECTION DIVIDER */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--gray-line); }
+
+  /* STALL SCATTER */
+  .scatter-wrap {
+    position: relative;
+    height: 180px;
+    background: var(--gray-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 4px 0;
+  }
+
+  .scatter-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+  .scatter-highlight {
+    position: absolute;
+    background: rgba(240,160,75,0.12);
+    border: 1px dashed var(--orange);
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-end;
+    padding: 4px 6px;
+  }
+
+  .scatter-highlight-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--orange);
+    letter-spacing: 0.5px;
+  }
+
+  .axis-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    position: absolute;
+    letter-spacing: 0.5px;
+  }
+
+  /* NARRATIVE BOX */
+  .narrative-box {
+    background: var(--navy);
+    border-radius: 6px;
+    padding: 18px 20px;
+    color: var(--white);
+  }
+
+  .narrative-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .narrative-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.82);
+    font-weight: 300;
+  }
+
+  .narrative-text strong { color: var(--white); font-weight: 500; }
+
+  .narrative-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin: 12px 0;
+  }
+
+  .narrative-risk {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .risk-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--orange);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  /* PULSE ANIMATION */
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+    margin-right: 5px;
+  }
+
+  /* RADAR SVG */
+  .radar-svg { position: absolute; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">STOC</div>
+    <div class="logo-sub">Intelligence Stack</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Dashboards</div>
+    <div class="nav-item active"><div class="nav-dot"></div> Opportunity Overview</div>
+    <div class="nav-item"><div class="nav-dot"></div> Add-On Velocity</div>
+    <div class="nav-item"><div class="nav-dot"></div> Platform Maturity</div>
+    <div class="nav-item"><div class="nav-dot"></div> Deal Friction</div>
+    <div class="nav-item"><div class="nav-dot"></div> Install Base Intel</div>
+    <div class="nav-item"><div class="nav-dot"></div> Buy & Build Readiness</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Exports</div>
+    <div class="nav-item"><div class="nav-dot"></div> LinkedIn Snapshot</div>
+    <div class="nav-item"><div class="nav-dot"></div> Institutional PDF</div>
+    <div class="nav-item"><div class="nav-dot"></div> Sponsor View</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sector-label">Active Sector</div>
+    <div class="sector-pill">Physical Therapy</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="page-title">Add-On Velocity Acceleration — Physical Therapy</div>
+      <div class="page-subtitle"><span class="live-dot"></span>Updated Feb 2026 · NAICS 621340 · Lower Middle Market</div>
+    </div>
+    <div class="topbar-right">
+      <div class="filter-chip">Sector: <span>Physical Therapy</span></div>
+      <div class="filter-chip">Rev Band: <span>$2M–$20M</span></div>
+      <div class="filter-chip">Period: <span>TTM</span></div>
+      <button class="export-btn">↓ Export PDF</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SCORE STRIP -->
+    <div class="score-strip">
+      <div class="score-card high">
+        <div class="score-label">STOC Score™</div>
+        <div class="score-value">84<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">92nd pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:8px"></div>
+            <div class="spark-bar filled" style="height:10px"></div>
+            <div class="spark-bar filled" style="height:9px"></div>
+            <div class="spark-bar filled" style="height:13px"></div>
+            <div class="spark-bar filled" style="height:14px"></div>
+            <div class="spark-bar filled" style="height:16px"></div>
+            <div class="spark-bar filled" style="height:18px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-card high">
+        <div class="score-label">Fragmentation</div>
+        <div class="score-value">78<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">88th pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:12px"></div>
+            <div class="spark-bar filled" style="height:14px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:16px"></div>
+            <div class="spark-bar filled" style="height:16px"></div>
+            <div class="spark-bar filled" style="height:18px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-card mid">
+        <div class="score-label">Sponsor Penetration</div>
+        <div class="score-value">41<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">48th pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:6px"></div>
+            <div class="spark-bar filled" style="height:8px"></div>
+            <div class="spark-bar filled" style="height:9px"></div>
+            <div class="spark-bar filled" style="height:10px"></div>
+            <div class="spark-bar filled" style="height:10px"></div>
+            <div class="spark-bar filled" style="height:11px"></div>
+            <div class="spark-bar filled" style="height:12px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-card high">
+        <div class="score-label">Add-On Velocity</div>
+        <div class="score-value">91<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">96th pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:7px"></div>
+            <div class="spark-bar filled" style="height:10px"></div>
+            <div class="spark-bar filled" style="height:13px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:17px"></div>
+            <div class="spark-bar filled" style="height:18px"></div>
+            <div class="spark-bar filled" style="height:18px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-card low">
+        <div class="score-label">Tech Maturity Gap</div>
+        <div class="score-value">62<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">71st pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:14px"></div>
+            <div class="spark-bar filled" style="height:13px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:14px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:16px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-card mid">
+        <div class="score-label">Integration Risk</div>
+        <div class="score-value">55<span class="score-pct">/100</span></div>
+        <div class="score-meta">
+          <div class="percentile">60th pctile</div>
+          <div class="sparkline">
+            <div class="spark-bar filled" style="height:16px"></div>
+            <div class="spark-bar filled" style="height:15px"></div>
+            <div class="spark-bar filled" style="height:14px"></div>
+            <div class="spark-bar filled" style="height:13px"></div>
+            <div class="spark-bar filled" style="height:13px"></div>
+            <div class="spark-bar filled" style="height:12px"></div>
+            <div class="spark-bar filled" style="height:11px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: VELOCITY + SPONSOR -->
+    <div class="section-label">Add-On Velocity Tracker™</div>
+
+    <div class="grid-32">
+      <!-- VELOCITY PANEL -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Acquisition Timeline — Physical Therapy</div>
+          <div class="panel-tag">Rolling 12M</div>
+        </div>
+        <div class="panel-body">
+          <div class="velocity-chart">
+            <div class="chart-grid-line" style="bottom:75%;"></div>
+            <div class="chart-grid-line" style="bottom:50%;"></div>
+            <div class="chart-grid-line" style="bottom:25%;"></div>
+            <div class="chart-area">
+              <!-- bars for each month -->
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:35%;background:#A8D4F0;"></div>
+                <div class="chart-label">Mar</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:42%;background:#A8D4F0;"></div>
+                <div class="chart-label">Apr</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:38%;background:#4FA8E0;"></div>
+                <div class="chart-label">May</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:55%;background:#4FA8E0;"></div>
+                <div class="chart-label">Jun</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:60%;background:#2B7FC4;"></div>
+                <div class="chart-label">Jul</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:65%;background:#2B7FC4;"></div>
+                <div class="chart-label">Aug</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:72%;background:#1A5F9E;"></div>
+                <div class="chart-label">Sep</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:68%;background:#1A5F9E;"></div>
+                <div class="chart-label">Oct</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:80%;background:#0B3D6B;"></div>
+                <div class="chart-label">Nov</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:85%;background:#0B3D6B;"></div>
+                <div class="chart-label">Dec</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:88%;background:#0B3D6B;"></div>
+                <div class="chart-label">Jan</div>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height:92%;background:#0B1F3A;"></div>
+                <div class="chart-label">Feb</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-item">
+            <div class="metric-val">47</div>
+            <div class="metric-lbl">Add-ons (12M)</div>
+            <div class="metric-delta up">↑ +18 vs prior yr</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">34d</div>
+            <div class="metric-lbl">Median Days Between</div>
+            <div class="metric-delta up">↑ Accelerating</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">#2</div>
+            <div class="metric-lbl">Sector Accel. Rank</div>
+            <div class="metric-delta up">↑ from #5</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPONSOR ACTIVITY -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Sponsor Activity Matrix</div>
+          <div class="panel-tag">Top 5 Active</div>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <table class="sponsor-table">
+            <thead>
+              <tr>
+                <th>Sponsor</th>
+                <th>Add-ons</th>
+                <th>Velocity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="sponsor-name">Revelstoke</div><div style="margin-top:2px"><span class="sponsor-tag">SE Focus</span></div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;">14</td>
+                <td>
+                  <div class="velocity-bar-wrap">
+                    <div class="velocity-track"><div class="velocity-fill" style="width:92%"></div></div>
+                    <div class="velocity-num">92</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="sponsor-name">Shore Capital</div><div style="margin-top:2px"><span class="sponsor-tag">Midwest</span></div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;">11</td>
+                <td>
+                  <div class="velocity-bar-wrap">
+                    <div class="velocity-track"><div class="velocity-fill" style="width:78%"></div></div>
+                    <div class="velocity-num">78</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="sponsor-name">Kinderhook</div><div style="margin-top:2px"><span class="sponsor-tag">National</span></div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;">9</td>
+                <td>
+                  <div class="velocity-bar-wrap">
+                    <div class="velocity-track"><div class="velocity-fill" style="width:65%"></div></div>
+                    <div class="velocity-num">65</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="sponsor-name">Blue Sea Capital</div><div style="margin-top:2px"><span class="sponsor-tag">NE Focus</span></div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;">7</td>
+                <td>
+                  <div class="velocity-bar-wrap">
+                    <div class="velocity-track"><div class="velocity-fill" style="width:52%"></div></div>
+                    <div class="velocity-num">52</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="sponsor-name">Clearview Capital</div><div style="margin-top:2px"><span class="sponsor-tag">Southwest</span></div></td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;">6</td>
+                <td>
+                  <div class="velocity-bar-wrap">
+                    <div class="velocity-track"><div class="velocity-fill" style="width:40%"></div></div>
+                    <div class="velocity-num">40</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: HEATMAP + GEO -->
+    <div class="section-label">Sector Intelligence Overview</div>
+
+    <div class="grid-32">
+      <!-- HEATMAP -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Fragmentation Index™ — Cross-Sector Benchmark</div>
+          <div class="panel-tag">Q1 2026</div>
+        </div>
+        <div class="panel-body" style="padding: 12px 18px;">
+          <table class="heatmap-table">
+            <thead>
+              <tr>
+                <th>Sector</th>
+                <th>Frag.</th>
+                <th>Velocity</th>
+                <th>Sponsor</th>
+                <th>Tech Gap</th>
+                <th>Int. Risk</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Physical Therapy ◀</td>
+                <td><div class="heat-cell h5">78</div></td>
+                <td><div class="heat-cell h5">91</div></td>
+                <td><div class="heat-cell h2">41</div></td>
+                <td><div class="heat-cell h4">62</div></td>
+                <td><div class="heat-cell h3">55</div></td>
+                <td class="row-score">84</td>
+              </tr>
+              <tr>
+                <td>Home Health</td>
+                <td><div class="heat-cell h5">82</div></td>
+                <td><div class="heat-cell h4">74</div></td>
+                <td><div class="heat-cell h3">58</div></td>
+                <td><div class="heat-cell h5">71</div></td>
+                <td><div class="heat-cell h4">63</div></td>
+                <td class="row-score">79</td>
+              </tr>
+              <tr>
+                <td>Dental DSO</td>
+                <td><div class="heat-cell h4">65</div></td>
+                <td><div class="heat-cell h5">88</div></td>
+                <td><div class="heat-cell h5">72</div></td>
+                <td><div class="heat-cell h3">48</div></td>
+                <td><div class="heat-cell h4">60</div></td>
+                <td class="row-score">76</td>
+              </tr>
+              <tr>
+                <td>Pest Control</td>
+                <td><div class="heat-cell h5">80</div></td>
+                <td><div class="heat-cell h3">55</div></td>
+                <td><div class="heat-cell h4">61</div></td>
+                <td><div class="heat-cell h3">44</div></td>
+                <td><div class="heat-cell h2">38</div></td>
+                <td class="row-score">71</td>
+              </tr>
+              <tr>
+                <td>HVAC Services</td>
+                <td><div class="heat-cell h4">70</div></td>
+                <td><div class="heat-cell h3">52</div></td>
+                <td><div class="heat-cell h4">66</div></td>
+                <td><div class="heat-cell h2">35</div></td>
+                <td><div class="heat-cell h2">32</div></td>
+                <td class="row-score">66</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px;display:flex;align-items:center;gap:6px;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;">INTENSITY</div>
+            <div style="display:flex;gap:3px;align-items:center;">
+              <div style="width:20px;height:10px;border-radius:2px;background:var(--gray-light)"></div>
+              <div style="width:20px;height:10px;border-radius:2px;background:#A8D4F0"></div>
+              <div style="width:20px;height:10px;border-radius:2px;background:#4FA8E0"></div>
+              <div style="width:20px;height:10px;border-radius:2px;background:#1A5F9E"></div>
+              <div style="width:20px;height:10px;border-radius:2px;background:#0B3D6B"></div>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">LOW → HIGH</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GEO + MATURITY -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <!-- GEO DENSITY -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Geographic Density — PT Locations</div>
+            <div class="panel-tag">CBSA View</div>
+          </div>
+          <div class="panel-body">
+            <div class="map-placeholder">
+              <!-- Abstract US shape using SVG -->
+              <svg viewBox="0 0 400 220" class="map-svg" xmlns="http://www.w3.org/2000/svg">
+                <path d="M60,60 L340,60 L360,100 L350,160 L300,180 L250,175 L200,185 L150,175 L100,170 L60,150 L40,110 Z" fill="#D0DCE8" stroke="#B0C8DE" stroke-width="1.5"/>
+                <path d="M280,170 L320,175 L330,200 L290,195 Z" fill="#D0DCE8" stroke="#B0C8DE" stroke-width="1"/>
+              </svg>
+              <!-- Density dots -->
+              <div class="map-dot" style="width:22px;height:22px;left:72%;top:35%;opacity:0.85;background:#0B3D6B;"></div>
+              <div class="map-dot" style="width:16px;height:16px;left:62%;top:42%;opacity:0.75;background:#1A5F9E;"></div>
+              <div class="map-dot" style="width:18px;height:18px;left:45%;top:55%;opacity:0.7;background:#2B7FC4;"></div>
+              <div class="map-dot" style="width:12px;height:12px;left:30%;top:45%;opacity:0.6;background:#4FA8E0;"></div>
+              <div class="map-dot" style="width:14px;height:14px;left:55%;top:65%;opacity:0.6;background:#4FA8E0;"></div>
+              <div class="map-dot" style="width:10px;height:10px;left:80%;top:50%;opacity:0.5;background:#A8D4F0;"></div>
+              <div class="map-dot" style="width:8px;height:8px;left:20%;top:60%;opacity:0.4;background:#A8D4F0;"></div>
+              <div style="position:absolute;bottom:8px;right:10px;font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.5px;">● Indep. Density  ● PE Platform</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: MATURITY + FRICTION + TECH -->
+    <div class="section-label">Platform Intelligence</div>
+
+    <div class="grid-3">
+      <!-- PLATFORM MATURITY -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Platform Maturity Index™</div>
+          <div class="panel-tag">Stall Risk</div>
+        </div>
+        <div class="panel-body">
+          <div class="scatter-wrap">
+            <!-- axis labels -->
+            <div class="axis-label" style="left:4px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center;">Maturity Score</div>
+            <div class="axis-label" style="bottom:4px;left:50%;transform:translateX(-50%);">No. of Locations</div>
+            <!-- highlight zone -->
+            <div class="scatter-highlight" style="left:30%;top:10%;width:28%;height:70%;">
+              <span class="scatter-highlight-label">STALL ZONE<br>5–10 locations</span>
+            </div>
+            <!-- dots -->
+            <div class="scatter-dot" style="left:12%;top:20%;background:#2ECC8F;" title="Mature"></div>
+            <div class="scatter-dot" style="left:18%;top:35%;background:#2ECC8F;"></div>
+            <div class="scatter-dot" style="left:25%;top:28%;background:#4FA8E0;"></div>
+            <div class="scatter-dot" style="left:35%;top:55%;background:#F0A04B;" title="Stalling"></div>
+            <div class="scatter-dot" style="left:40%;top:62%;background:#F0A04B;"></div>
+            <div class="scatter-dot" style="left:45%;top:48%;background:#F0A04B;"></div>
+            <div class="scatter-dot" style="left:52%;top:70%;background:#E05C5C;"></div>
+            <div class="scatter-dot" style="left:62%;top:75%;background:#4FA8E0;"></div>
+            <div class="scatter-dot" style="left:72%;top:30%;background:#2ECC8F;"></div>
+            <div class="scatter-dot" style="left:80%;top:22%;background:#1A5F9E;"></div>
+            <div class="scatter-dot" style="left:85%;top:18%;background:#0B3D6B;width:14px;height:14px;"></div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:12px;">
+            <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-soft)"><div style="width:8px;height:8px;border-radius:50%;background:#2ECC8F;flex-shrink:0;"></div>Mature</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-soft)"><div style="width:8px;height:8px;border-radius:50%;background:#F0A04B;flex-shrink:0;"></div>Stalling</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-soft)"><div style="width:8px;height:8px;border-radius:50%;background:#E05C5C;flex-shrink:0;"></div>At Risk</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEAL FRICTION -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Margin Distortion Frequency — PT</div>
+          <div class="panel-tag">QoE Issues</div>
+        </div>
+        <div class="panel-body">
+          <div class="friction-list">
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">Owner Comp Normalization</span><span class="friction-pct">74%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:74%;background:#0B3D6B;"></div></div>
+            </div>
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">Non-Recurring Revenue Masking</span><span class="friction-pct">61%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:61%;background:#1A5F9E;"></div></div>
+            </div>
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">AR Aging Distortions</span><span class="friction-pct">55%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:55%;background:#2B7FC4;"></div></div>
+            </div>
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">Working Capital Traps</span><span class="friction-pct">48%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:48%;background:#4FA8E0;"></div></div>
+            </div>
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">Margin Distortion</span><span class="friction-pct">42%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:42%;background:#79C0E8;"></div></div>
+            </div>
+            <div class="friction-item">
+              <div class="friction-top"><span class="friction-name">Inventory Overstatement</span><span class="friction-pct">22%</span></div>
+              <div class="friction-track"><div class="friction-fill" style="width:22%;background:#A8D4F0;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSTALL BASE / TECH -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Tech Penetration — PT Operators</div>
+          <div class="panel-tag">Install Base Intel™</div>
+        </div>
+        <div class="panel-body">
+          <div class="tech-list">
+            <div class="tech-item">
+              <div class="tech-name">EMR / EHR System</div>
+              <div class="tech-track"><div class="tech-fill" style="width:82%;background:#0B3D6B;"><span class="tech-pct">82%</span></div></div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">Payment Processor</div>
+              <div class="tech-track"><div class="tech-fill" style="width:71%;background:#1A5F9E;"><span class="tech-pct">71%</span></div></div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">Scheduling / PMS</div>
+              <div class="tech-track"><div class="tech-fill" style="width:64%;background:#2B7FC4;"><span class="tech-pct">64%</span></div></div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">RCM Tools</div>
+              <div class="tech-track"><div class="tech-fill" style="width:44%;background:#4FA8E0;"><span class="tech-pct">44%</span></div></div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">ERP / Accounting</div>
+              <div class="tech-track"><div class="tech-fill" style="width:31%;background:#79C0E8;"><span class="tech-pct">31%</span></div></div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-name">Forecasting / BI</div>
+              <div class="tech-track"><div class="tech-fill" style="width:14%;background:#A8D4F0;"><span class="tech-pct" style="color:var(--navy)">14%</span></div></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:10px;background:var(--gray-light);border-radius:4px;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">HHI Fragmentation Score</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--navy);">0.14 <span style="font-size:11px;font-weight:400;color:var(--text-soft);">High fragmentation</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NARRATIVE BOX -->
+    <div class="section-label">IC Intelligence Summary</div>
+
+    <div class="narrative-box">
+      <div class="narrative-tag">AI-Generated Narrative · Physical Therapy · Feb 2026</div>
+      <div class="narrative-text">
+        <strong>Pattern:</strong> Physical therapy continues to exhibit the highest add-on velocity acceleration of any tracked healthcare sub-vertical, with 47 acquisitions logged in the trailing twelve months — an 18-deal increase year-over-year. Revelstoke and Shore Capital account for 53% of activity, with a pronounced Southeast and Midwest concentration suggesting geographic whitespace in Mountain West and Pacific Northwest markets.
+      </div>
+      <hr class="narrative-divider">
+      <div class="narrative-text">
+        <strong>Stall Risk Signal:</strong> Platforms with 5–10 locations represent the highest concentration of infrastructure gap flags. 62% of operators in this cohort lack standardized KPI reporting; 44% have no RCM tooling. This creates a predictable integration drag at the 7–9 location threshold that manifests as EBITDA margin compression of 200–350bps post-acquisition.
+      </div>
+      <hr class="narrative-divider">
+      <div class="narrative-risk">
+        <div class="risk-label">Underwriting Risk</div>
+        <div>AR aging distortions appear in 55% of QoE engagements. Owner comp normalization remains the leading friction point. Buyers should budget 6–10% EBITDA adjustment on targets below $5M revenue.</div>
+      </div>
+      <hr class="narrative-divider">
+      <div class="narrative-risk">
+        <div class="risk-label" style="color:var(--green);">Action</div>
+        <div>Three CBSAs with &lt;15% PE penetration and &gt;40 independent operators: Boise ID, Spokane WA, Chattanooga TN. Recommended for immediate CDS sourcing outreach.</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
