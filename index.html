@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STOC Opportunity Intelligence — Physical Therapy</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+</style>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,7 +31,7 @@
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: #F2F6FA;
     color: var(--text);
     min-height: 100vh;
@@ -54,7 +56,7 @@
   }
 
   .logo-mark {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 800;
     font-size: 20px;
     color: var(--white);
@@ -62,7 +64,7 @@
   }
 
   .logo-sub {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     color: var(--muted);
     letter-spacing: 2px;
@@ -75,7 +77,7 @@
   }
 
   .nav-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -113,7 +115,7 @@
     border: 1px solid rgba(79,168,224,0.3);
     border-radius: 4px;
     padding: 6px 10px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 10px;
     color: var(--accent);
     letter-spacing: 0.5px;
@@ -142,7 +144,7 @@
   }
 
   .page-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 700;
     font-size: 15px;
     color: var(--navy);
@@ -153,7 +155,7 @@
     font-size: 11px;
     color: var(--text-soft);
     margin-top: 1px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     letter-spacing: 0.3px;
   }
 
@@ -174,7 +176,7 @@
     font-size: 11px;
     color: var(--text-soft);
     cursor: pointer;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
   }
 
   .filter-chip span { color: var(--navy); font-weight: 500; }
@@ -186,7 +188,7 @@
     border-radius: 4px;
     padding: 7px 14px;
     font-size: 11px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 500;
     cursor: pointer;
     letter-spacing: 0.2px;
@@ -227,7 +229,7 @@
   .score-card.low::before { background: var(--orange); }
 
   .score-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -236,7 +238,7 @@
   }
 
   .score-value {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 700;
     font-size: 26px;
     color: var(--navy);
@@ -254,7 +256,7 @@
   }
 
   .percentile {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     color: var(--text-soft);
   }
@@ -297,7 +299,7 @@
   }
 
   .panel-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 700;
     font-size: 12px;
     color: var(--navy);
@@ -305,7 +307,7 @@
   }
 
   .panel-tag {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     color: var(--muted);
@@ -317,7 +319,7 @@
   /* HEATMAP */
   .heatmap-table { width: 100%; border-collapse: collapse; }
   .heatmap-table th {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -349,7 +351,7 @@
     width: 40px;
     height: 24px;
     border-radius: 3px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 10px;
     font-weight: 500;
   }
@@ -361,7 +363,7 @@
   .h1 { background: var(--gray-light); color: var(--text-soft); }
 
   .row-score {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 700;
     font-size: 13px;
     color: var(--navy);
@@ -398,7 +400,7 @@
   }
 
   .chart-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 8px;
     color: var(--muted);
     margin-top: 4px;
@@ -421,14 +423,14 @@
 
   .metric-item { }
   .metric-val {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Syne', Georgia, serif;
     font-weight: 700;
     font-size: 20px;
     color: var(--navy);
     letter-spacing: -0.5px;
   }
   .metric-lbl {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     color: var(--text-soft);
     letter-spacing: 0.5px;
@@ -467,7 +469,7 @@
   /* SPONSOR TABLE */
   .sponsor-table { width: 100%; border-collapse: collapse; }
   .sponsor-table th {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -488,7 +490,7 @@
     background: rgba(79,168,224,0.12);
     border-radius: 3px;
     padding: 2px 6px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     color: var(--blue);
   }
@@ -496,7 +498,7 @@
   .velocity-bar-wrap { display: flex; align-items: center; gap: 8px; }
   .velocity-track { flex: 1; height: 4px; background: var(--gray-line); border-radius: 2px; }
   .velocity-fill { height: 100%; border-radius: 2px; background: var(--blue-light); }
-  .velocity-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-soft); width: 24px; text-align: right; }
+  .velocity-num { font-family: 'DM Mono', 'Courier New', monospace; font-size: 10px; color: var(--text-soft); width: 24px; text-align: right; }
 
   /* MATURITY RADAR PLACEHOLDER */
   .radar-wrap {
@@ -512,7 +514,7 @@
   .friction-item { }
   .friction-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
   .friction-name { font-size: 11px; color: var(--text); font-weight: 400; }
-  .friction-pct { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-soft); }
+  .friction-pct { font-family: 'DM Mono', 'Courier New', monospace; font-size: 10px; color: var(--text-soft); }
   .friction-track { height: 5px; background: var(--gray-light); border-radius: 3px; }
   .friction-fill { height: 100%; border-radius: 3px; }
 
@@ -522,11 +524,11 @@
   .tech-name { font-size: 11px; color: var(--text); width: 130px; flex-shrink: 0; }
   .tech-track { flex: 1; height: 14px; background: var(--gray-light); border-radius: 3px; overflow: hidden; }
   .tech-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 6px; }
-  .tech-pct { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--white); font-weight: 500; }
+  .tech-pct { font-family: 'DM Mono', 'Courier New', monospace; font-size: 9px; color: var(--white); font-weight: 500; }
 
   /* SECTION DIVIDER */
   .section-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -568,14 +570,14 @@
   }
 
   .scatter-highlight-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 8px;
     color: var(--orange);
     letter-spacing: 0.5px;
   }
 
   .axis-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 8px;
     color: var(--muted);
     position: absolute;
@@ -591,7 +593,7 @@
   }
 
   .narrative-tag {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -623,7 +625,7 @@
   }
 
   .risk-label {
-    font-family: 'DM Mono', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     font-size: 9px;
     color: var(--orange);
     letter-spacing: 1px;
